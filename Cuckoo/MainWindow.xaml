@@ -1,0 +1,32 @@
+﻿<Window x:Class="Cuckoo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Cuckoo"
+        mc:Ignorable="d"
+        Title="Cuckoo" Height="150" Width="400" >
+	<StackPanel>
+		<StackPanel Orientation="Horizontal" Margin="10">
+			<TextBlock Margin="0 0 10 0" >
+                Interval(min.)
+			</TextBlock>
+			<TextBox x:Name="IntervalTxt" Style="{StaticResource Numeric }" Text="5"/>
+			<TextBlock Margin="10 0 10 0"   >
+                Adjust. (sec.)
+			</TextBlock>
+			<TextBox x:Name="AdjustmentTxt" Style="{StaticResource Numeric }" Text="-25"/>
+		</StackPanel>
+
+		<StackPanel Orientation="Horizontal" Margin="10">
+			<TextBlock Margin="0 0 10 0" >
+                Start time
+			</TextBlock>
+			<TextBox x:Name="StartTimeTxt" Style="{StaticResource Time }" Text="08:55:00"/>
+			<TextBlock Margin="10 0 10 0"   >
+                End Time
+			</TextBlock>
+			<TextBox x:Name="EndTimeTxt" Style="{StaticResource Time }" Text="15:30:00"/>
+		</StackPanel>
+	</StackPanel>
+</Window>
