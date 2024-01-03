@@ -11,52 +11,59 @@ using System.Windows.Shapes;
 
 namespace Cuckoo
 {
-	public partial class MainWindow : Window
-	{
+    public partial class MainWindow : Window
+    {
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int Interval { get; set; }
         public int Adjustment { get; set; }
-		public System.Timers.Timer SystemTimer { get; set; } = new System.Timers.Timer();
-		public System.Timers.Timer IntervalTimer { get; set; } = new System.Timers.Timer();
+        public System.Timers.Timer SystemTimer { get; set; } = new System.Timers.Timer();
+        public System.Timers.Timer IntervalTimer { get; set; } = new System.Timers.Timer();
 
         public MainWindow()
-		{
-			InitializeComponent();
+        {
+            InitializeComponent();
 
-			this.ContentRendered += MainWindow_ContentRendered;
+            this.ContentRendered += MainWindow_ContentRendered;
 
-			StartTime = DateTime.Parse(StartTimeTxt.Text);
-			EndTime = DateTime.Parse(EndTimeTxt.Text);
-			Adjustment = int.Parse(AdjustmentTxt.Text);
-			Interval = int.Parse(IntervalTxt.Text);
+            StartTime = DateTime.Parse(StartTimeTxt.Text);
+            EndTime = DateTime.Parse(EndTimeTxt.Text);
+            Adjustment = int.Parse(AdjustmentTxt.Text);
+            Interval = int.Parse(IntervalTxt.Text);
         }
 
-		private async void MainWindow_ContentRendered(object? sender, EventArgs e)
-		{
-			var now = DateTime.Now;
-			if (now > EndTime) return;
+        private async void MainWindow_ContentRendered(object? sender, EventArgs e)
+        {
+            var now = DateTime.Now;
+            if (now > EndTime) return;
 
-			var seconds = now.TimeOfDay.Seconds + now.TimeOfDay.Minutes * 60;
-			int remainder = Convert.ToInt32(seconds % (Interval * 60));
-			var timeToStart = (now > StartTime ? now.AddSeconds(Interval * 60 - remainder) : StartTime).AddSeconds(Adjustment);
+            var seconds = now.TimeOfDay.Seconds + now.TimeOfDay.Minutes * 60;
+            int remainder = Convert.ToInt32(seconds % (Interval * 60));
+            var timeToStart = (now > StartTime ? now.AddSeconds(Interval * 60 - remainder) : StartTime).AddSeconds(Adjustment);
 
-			var timeUntilEvent = timeToStart - now;
+            var timeUntilEvent = timeToStart - now;
 
-			await Task.Delay(timeUntilEvent);
-			IntervalTimer.Interval = Interval * 60 * 1000;
-			IntervalTimer.Elapsed += IntervalTimer_Elapsed;
+            await Task.Delay(timeUntilEvent);
+            IntervalTimer.Interval = Interval * 60 * 1000;
+            IntervalTimer.Elapsed += IntervalTimer_Elapsed;
 
-			IntervalTimer.Start();
-		}
+            IntervalTimer.Start();
+            Play();
+        }
 
-		private void IntervalTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
-		{
-			if (DateTime.Now > EndTime) IntervalTimer.Stop();
+        private void IntervalTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (DateTime.Now > EndTime) IntervalTimer.Stop();
 
-			var mediaPlayer = new MediaPlayer();
-			mediaPlayer.Open(new Uri("D:\\music\\Ringtones\\1sec-Notification-03.mp3"));
-			mediaPlayer.Play();
-		}
-	}
+            Play();
+        }
+
+        private void Play()
+        {
+            var mediaPlayer = new MediaPlayer();
+            mediaPlayer.Open(new Uri("D:\\music\\Ringtones\\1sec-Notification-03.mp3"));
+            mediaPlayer.Volume = 0.05;
+            mediaPlayer.Play();
+        }
+    }
 }
